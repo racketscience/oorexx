@@ -853,10 +853,11 @@ deb:
 	rm -fr $(top_srcdir)/debian
 	mkdir $(top_srcdir)/debian
 # Generate a current change log in the required Debian format
-	sed -n -e '1,2p' $(top_srcdir)/platform/unix/debian/changelog > ${top_srcdir}/debian/changelog
-	sed -e 's/.*/  &/' CHANGES >> ${top_srcdir}/debian/changelog
-	sed -e "1,3d; 4,6s/date/`date -R`/" $(top_srcdir)/platform/unix/debian/changelog >>  ${top_srcdir}/debian/changelog
+#	sed -n -e '1,2p' $(top_srcdir)/platform/unix/debian/changelog > ${top_srcdir}/debian/changelog
+#	sed -e 's/.*/  &/' CHANGES >> ${top_srcdir}/debian/changelog
+#	sed -e "1,3d; 4,6s/date/`date -R`/" $(top_srcdir)/platform/unix/debian/changelog >>  ${top_srcdir}/debian/changelog
 # Just copy the rest of the files
+	cp $(top_srcdir)/platform/unix/debian/changelog ${top_srcdir}/debian
 	cp $(top_srcdir)/platform/unix/debian/compat    ${top_srcdir}/debian
 	cp $(top_srcdir)/platform/unix/debian/control   ${top_srcdir}/debian
 	cp $(top_srcdir)/platform/unix/debian/copyright ${top_srcdir}/debian

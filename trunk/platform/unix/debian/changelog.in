@@ -67,7 +67,7 @@ oorexx (@PACKAGE_VERSION@-@SVN_REV@) stable; urgency=medium
 
   * 1700112 - [Enhancement] Add "abstract" option to the METOD directive.
 
-  * 1700672 - [Enhancement] Multideminsional array PUT, add 
+  * 1700672 - [Enhancement] Multideminsional array PUT, add
     PUT(item, arrayOfIndexes)
 
   * 1700734 - [Enhancement] Make the stem class a map collection.
@@ -320,5 +320,5 @@ oorexx (@PACKAGE_VERSION@-@SVN_REV@) stable; urgency=medium
 
   * 1806254 - No depency on core classes for the rexx.img in the make file.
 
- -- W. David Ashley <wdashley@users.sourceforge.net>  Sun 28 Oct 2008 08:00:00 GMT
+ -- W. David Ashley <wdashley@users.sourceforge.net>  Sun, 28 Oct 2007 08:00:00 -0500
 
