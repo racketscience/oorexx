@@ -362,5 +362,7 @@ oorexx (@PACKAGE_VERSION@-@SVN_REV@) stable; urgency=medium
 
   * 1814596 - RxMath functions do not honor precision on Windows.
 
+  * 1814725 - ./configure producing invalid xsl.sh
+
  -- W. David Ashley <wdashley@users.sourceforge.net>  Sun, 28 Oct 2007 08:00:00 -0500
 
