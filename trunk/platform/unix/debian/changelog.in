@@ -226,10 +226,17 @@ oorexx (@PACKAGE_VERSION@-@SVN_REV@) stable; urgency=medium
   * 1756792 - [Enhancment] Add method to retrieve the intermediate superclass
     of a class.
 
-
-
+  * 1757629 - [Enhancment] Add Hybrid option to method directive.
 
   * 1757895 - ooDialog - ResDialog should fail on non-numeric ID.
+
+  * 1769672 - [Enhancment] Provide SVN revision number to Windows build.
+
+  * 1772723 - 00Dialog - Improve WS_GROUP and WS_TABSTOP handling.
+
+  * 1779444 - 00Dialog - Improve function key and hot key handling.
+
+  * 1782198 - Add SVN revision number to RPM build.
 
   * 1758305 - ooDialog - setting of modal flag in startit is ambiguous.
 
@@ -286,27 +293,52 @@ oorexx (@PACKAGE_VERSION@-@SVN_REV@) stable; urgency=medium
 
   * 1782193 - Fixed a C library problem in VACPP98 with the atol function.
 
+  * 1785130 - Add Debian and Ubuntu packaging build.
+
   * 1786098 - Fixed macro order in the configure.ac file.
 
   * 1786145 - Fixed errors when generating the source distribution.
 
   * 1786436 - Fixed some problems with the documentation.
 
+  * 1786440 - Add "QUEUE" monitor for .Local.
+
   * 1786669 - ftyperex.rex refers to a program that does not exist.
 
+  * 1790623 - Add new option to time() bif to get the full time.
+
   * 1790641 - Building the rexxrefr doc fails due to missing image file.
+
+  * 1790975 - Improve the listing of the current ooRexx program line in error
+    messages.
+
+  * 1792694 - Add a new maxchange option to the changeStr() BIF.
+
+  * 1792831 - Correct value() BIF for environment lookup of symbol name.
 
   * 1793544 - Queue's append method inserts at the wrong position.
 
   * 1793959 - Changestr BIF in error.
 
+  * 1794761 - ooDialog - Add isMinimized and isMaximized methods.
+
   * 1794816 - Wrong word in documentation.
 
   * 1800633 - ooDialog - Maximize / minimize wrong class.
 
+  * 1800672 - Add 'T' option to date() and time() BIFs for Regina compatability.
+
+  * 1802613 - Add invalid argument major message code.
+
   * 1802711 - arg() returning unexpected value for prefix operators.
 
+  * 1802825 - Add DateTime and TimeSpan classes.
+
+  * 1802832 - Add hashcode method to the Object class.
+
   * 1802909 - parse lower broken.
+
+  * 1803061 - ooDialog - Addthe DM_REPOSITION message.
 
   * 1803673 - ooDialog - get method incorrectly documented.
 
@@ -316,9 +348,19 @@ oorexx (@PACKAGE_VERSION@-@SVN_REV@) stable; urgency=medium
 
   * 1804386 - Rev 831 broke OLEObject.
 
+  * 1804523 - Add concatenate method to Object class.
+
   * 1805990 - Propertis file continues to grow.
 
   * 1806254 - No depency on core classes for the rexx.img in the make file.
+
+  * 1806394 - Add isGuarded, isPrivate, isProtected methods to Method class.
+
+  * 1809129 - ooDialog - Retrieve controlID from window handle.
+
+  * 1812657 - ooDialog - Add the ability to fetch the system metrics.
+
+  * 1814596 - RxMath functions do not honor precision on Windows.
 
  -- W. David Ashley <wdashley@users.sourceforge.net>  Sun, 28 Oct 2007 08:00:00 -0500
 
