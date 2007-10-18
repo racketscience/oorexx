@@ -155,10 +155,9 @@ oorexx (@PACKAGE_VERSION@-@SVN_REV@) stable; urgency=medium
 
   * 1735934 - ooDialog - crash in aDlg~get method
 
-  * 1736032 - [Enhancement] Two new methods are added to the ooDialog classes:
-    SetFocusToWindow to the DialogControl class and SetFocusToWindow to the
-    DialogExtensions class. The methods are documented in the ooDialog
-    Reference.
+  * 1736032 - [Enhancement] Add ability to set foreground window to ooDialog
+    Two new methods are added to the ooDialog classes: SetForegroundWindow
+    and SetFocusToWindow.
 
   * 1737468 - [Enhancment] ooDialog - add tab to next / tab to previous
     Methods to programmatically move to the next or previous tabstop
