@@ -159,9 +159,9 @@ The following is the list of fixes and enhancements added to ooRexx since the
 
   * 1735934 - ooDialog - crash in aDlg~get method
 
-  * 1736032 - [Enhancement] Add ability to set foreground window to ooDialog
-    Two new methods are added to the ooDialog classes: SetFocusToWindow
-    and SetFocusToWindow.  The methods are documented in the ooDialog
+  * 1736032 - [Enhancement] Two new methods are added to the ooDialog classes:
+    SetFocusToWindow to the DialogControl class and SetFocusToWindow to the
+    DialogExtensions class. The methods are documented in the ooDialog
     Reference.
 
   * 1737468 - [Enhancment] ooDialog - add tab to next / tab to previous
