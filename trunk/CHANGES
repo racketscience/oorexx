@@ -367,5 +367,7 @@ The following is the list of fixes and enhancements added to ooRexx since the
 
   * 1814725 - ./configure producing invalid xsl.sh
 
+  * 1818204 - callrexx1 sample seg faults on AIX
+
  -- W. David Ashley <wdashley@users.sourceforge.net>  Sun, 28 Oct 2007 08:00:00 -0500
 
