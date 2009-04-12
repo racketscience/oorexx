@@ -600,12 +600,8 @@ BOOL APIENTRY DllMain(HANDLE hModule, DWORD ul_reason_for_call, LPVOID lpReserve
     switch ( ul_reason_for_call )
     {
         case DLL_PROCESS_DETACH:
-            if ( iInstanceCount > 0 )
-            {
-                printf("Warning: orexxole.dll DLL process detach, instance count (%d) not 0\n", iInstanceCount);
-                // destroyTypeLibList();
-                // OleUninitialize();
-            }
+            // In the release version we do nothing if iInstanceCount is not 0.
+
             // free class info memory [not a real leak]  not really needed,
             // since the process will go away and release that memory, but it is
             // cleaner this way
