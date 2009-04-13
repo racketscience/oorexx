@@ -718,14 +718,16 @@ void StreamInfo::implicitOpen(int type)
     resolveStreamName();
 
     // first try for read/write and open file without create if specified
+    // If this is an implicit open, try to open for shared readwrite, otherwise
+    // we'll break the stream BIFs with nested calls.
     read_write = true;
     if (type == operation_nocreate)
     {
-        open(O_RDWR | RX_O_BINARY, IREAD_IWRITE, RX_SH_DENYRW);
+        open(O_RDWR | RX_O_BINARY, IREAD_IWRITE, RX_SH_DENYNO);
     }
     else
     {
-        open(RDWR_CREAT | RX_O_BINARY, IREAD_IWRITE, RX_SH_DENYRW);
+        open(RDWR_CREAT | RX_O_BINARY, IREAD_IWRITE, RX_SH_DENYNO);
     }
 
     // if there was an open error and we have the info to try again - doit
@@ -738,12 +740,12 @@ void StreamInfo::implicitOpen(int type)
         {
             // In Windows, all files are readable. Therefore S_IWRITE is
             // equivalent to S_IREAD | S_IWRITE.
-            open(O_WRONLY | RX_O_BINARY, IREAD_IWRITE, RX_SH_DENYRW);
+            open(O_WRONLY | RX_O_BINARY, IREAD_IWRITE, RX_SH_DENYNO);
             write_only = true;
         }
         else
         {
-            open(O_RDONLY | RX_O_BINARY, S_IREAD, RX_SH_DENYRW);
+            open(O_RDONLY | RX_O_BINARY, S_IREAD, RX_SH_DENYNO);
             read_only = true;
         }
 
@@ -761,6 +763,10 @@ void StreamInfo::implicitOpen(int type)
             return;
         }
     }
+
+    // do not buffer implicitly opened streams, since
+    // ones opened by the stream bifs don't expect the buffering
+    fileInfo.setBuffering(false, 0);
 
     // persistent writeable stream?
     if (!fileInfo.isTransient() && !read_only)
@@ -2905,6 +2911,7 @@ RexxObjectPtr StreamInfo::queryStreamPosition(const char *options)
     {
         return context->NullString();
     }
+
     // transient streams alwasy return 1
     if (transient)
     {
@@ -3306,7 +3313,7 @@ RexxMethod1(CSTRING, query_streamtype, CSELF, streamPtr)
  *
  * @return The int64_t size of the stream.  Devices return a 0 size.
  */
-int64_t StreamInfo::getStreamSize()
+RexxObjectPtr StreamInfo::getStreamSize()
 {
     // if we're open, return the current fstat() information,
     // otherwise, we do this without a handle
@@ -3314,14 +3321,18 @@ int64_t StreamInfo::getStreamSize()
     {
         int64_t streamsize;
         fileInfo.getSize(streamsize);
-        return streamsize;
+        return context->Int64ToObject(streamsize);
     }
     else
     {
         resolveStreamName();
         int64_t streamsize;
-        fileInfo.getSize(qualified_name, streamsize);
-        return streamsize;
+        if (fileInfo.getSize(qualified_name, streamsize))
+        {
+            return context->Int64ToObject(streamsize);
+        }
+        // return a null string if this doesn't exist
+        return context->NullString();
     }
 }
 
@@ -3354,7 +3365,7 @@ const char *StreamInfo::getTimeStamp()
 /********************************************************************************************/
 /* query_size                                                                               */
 /********************************************************************************************/
-RexxMethod1(int64_t, query_size, CSELF, streamPtr)
+RexxMethod1(RexxObjectPtr, query_size, CSELF, streamPtr)
 {
     StreamInfo *stream_info = (StreamInfo *)streamPtr;
     stream_info->setContext(context, context->NullString());
