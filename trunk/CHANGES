@@ -68,9 +68,11 @@ All Platforms
 
   * 2163868 - RexxAddMacro Bug
 
-  * 2194862 - 4.0.0.3609 sample ktquard.rex hangs
-
   * 2469796 - uninit method not called when interpreter terminates
+
+  * 2662226 - Sockets Problem
+
+  * 2692610 - MAKEARRAY: incorrect result if length(separator) <>1
 
   Requests For Enhancement
   ------------------------
@@ -255,13 +257,17 @@ Windows
 
   * 2524036 - ooDialog - addXXX methods inconsistent
 
-  * 2597092  oowalk2.rex sample for ooDialog is broken
+  * 2597092 - oowalk2.rex sample for ooDialog is broken
 
-  * 2603760  WindowsEventLog read() uses incorrect event type
+  * 2603760 - WindowsEventLog read() uses incorrect event type
 
-  * 2607013  ooDialog - the createFont() method is broken
+  * 2607013 - ooDialog - the createFont() method is broken
 
-  * 2632125  ooDialog - setImages, etc. fails using bitmap handle
+  * 2632125 - ooDialog - setImages, etc. fails using bitmap handle
+
+  * 2759086 - OLEObject: some COM object methods are not inovked
+
+  * 2759089 - RxWinExec call fails
 
   Requests For Enhancement
   ------------------------
@@ -321,6 +327,8 @@ Unix/Linux
   * 1908020 - RXTRACE environment symbol crashes interpreter
 
   * 1941155 - rexx manpage error on Ubuntu w/ 7.04 package
+
+  * 2704014 - gcvt used despite not configured forNetBSD
 
   Patches
   -------
@@ -470,3 +478,13 @@ Documentation
   * 2515776 - Document new behaviour of RxFuncAdd
 
   * 2517194 - Cleanup parameter types in docs to match header file.
+
+  * 2580519 - Clarify SysTempFileName
+
+  * 2662673 - Array Examples
+
+  * 2702760 - RexxRef caselessDescendingcomparator diagram
+
+  * 2737764 - precedence table should include ~ and ~~
+
+  * 2759880 - Rexx and RexxC Return Codes
