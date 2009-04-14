@@ -3213,7 +3213,7 @@ size_t RexxEntry RxWinExec(const char *name, size_t numargs, CONSTRXSTRING args[
   size_t      length;                  /* length of option           */
   STARTUPINFO si;
   PROCESS_INFORMATION procInfo;
-  printf("In RxWinExec() numargs=%d validstr0=%d validstr1=%d\n", numargs, RXVALIDSTRING(args[0]), RXVALIDSTRING(args[1]));
+
 
 PSZ    show_styles[] =                 /* show window types          */
     {"SHOWNORMAL",
