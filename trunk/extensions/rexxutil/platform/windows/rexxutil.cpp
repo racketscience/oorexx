@@ -3213,7 +3213,7 @@ size_t RexxEntry RxWinExec(const char *name, size_t numargs, CONSTRXSTRING args[
   size_t      length;                  /* length of option           */
   STARTUPINFO si;
   PROCESS_INFORMATION procInfo;
-
+  printf("In RxWinExec() numargs=%d validstr0=%d validstr1=%d\n", numargs, RXVALIDSTRING(args[0]), RXVALIDSTRING(args[1]));
 
 PSZ    show_styles[] =                 /* show window types          */
     {"SHOWNORMAL",
@@ -3237,13 +3237,12 @@ ULONG  show_flags[] =                  /* show window styles        */
 
   BUILDRXSTRING(retstr, NO_UTIL_ERROR);/* pass back result           */
 
-
-  if (numargs < 1 ||
-      numargs > 2 ||                   /* should be 1 or two args    */
-      !RXVALIDSTRING(args[0]) ||
-      !RXVALIDSTRING(args[1]) ||
-      args[0].strlength > MAX_PATH)
-    return INVALID_ROUTINE;            /* Invalid call to routine    */
+  // Should be 1 or 2 args.
+  if ( numargs < 1 || numargs > 2 || !RXVALIDSTRING(args[0]) ||
+       (numargs == 2 && !RXVALIDSTRING(args[1])) ||args[0].strlength > MAX_PATH )
+  {
+        return INVALID_ROUTINE;            /* Invalid call to routine    */
+  }
 
   CmdShow=0;                           /* initialize show flags      */
                                        /* validate arguments         */
