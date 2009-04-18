@@ -995,7 +995,6 @@
 ::method SetWindowRect unguarded
    use arg hnd, x, y, width, high, showOptions
    if Arg(6,"o") = 1 then showOptions = ""; else showOptions = showOptions~translate
-   if hnd = 0 | hnd~datatype("N") = 0 then return -1
    return WndShow_Pos("P",hnd, x, y, width, high, showOptions)
 
    /* Redraws the given rectangle */
