@@ -7324,7 +7324,7 @@ static String2Int *imageInitMap(void)
     return cMap;
 }
 
-RexxMethod1(uint32_t, image_id_cls, CSTRING, id)
+RexxMethod1(uint32_t, image_toID_cls, CSTRING, symbol)
 {
     static String2Int *imageConstantsMap = NULL;
 
@@ -7332,10 +7332,10 @@ RexxMethod1(uint32_t, image_id_cls, CSTRING, id)
     {
         imageConstantsMap = imageInitMap();
     }
-    int idValue = getConstantValue(imageConstantsMap, id);
+    int idValue = getConstantValue(imageConstantsMap, symbol);
     if ( idValue == -1 )
     {
-        wrongArgValueException(context, 1, "the Image class symbol IDs", id);
+        wrongArgValueException(context, 1, "the Image class symbol IDs", symbol);
     }
     return (uint32_t)idValue;
 }
