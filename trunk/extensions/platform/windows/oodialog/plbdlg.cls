@@ -107,7 +107,7 @@
 
 ::method Unknown unguarded
    use arg msgname
-   call ErrorMessage(msgname || " is not a method of " || self)
+   call ErrorMessage msgname || " is not a method of " || self
 
 ::method init_WindowBase
    use arg hwnd
