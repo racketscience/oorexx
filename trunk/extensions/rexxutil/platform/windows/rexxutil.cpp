@@ -282,12 +282,12 @@ FILE_SYSTEM | FILE_ARCHIVED | MUST_HAVE_DIRECTORY | FILE_DIRECTORY
 /* RxTree Structure used by GetLine, OpenFile and CloseFile          */
 /*********************************************************************/
 typedef struct _GetFileData {
-  char *       buffer;                 /* file read buffer           */
   size_t       size;                   /* file size                  */
   size_t       data;                   /* data left in buffer        */
   size_t       residual;               /* size left to read          */
-  char *       scan;                   /* current scan position      */
   HANDLE       handle;                 /* file handle                */
+  char *       buffer;                 /* file read buffer           */
+  char *       scan;                   /* current scan position      */
 } GetFileData;
 
 /*********************************************************************/
