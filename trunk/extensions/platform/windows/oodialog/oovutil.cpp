@@ -95,22 +95,29 @@ public:
 };
 
 
-/********************************************************************
-* Function:  string2pointer(string)                                 *
-*                                                                   *
-* Purpose:   Validates and converts an ASCII-Z string from string   *
-*            form to a pointer value.  Returns false if the number  *
-*            is not valid, true if the number was successfully      *
-*            converted.                                             *
-*                                                                   *
-* RC:        true - Good number converted                           *
-*            false - Invalid number supplied.                       *
-*********************************************************************/
-
+/**
+ * Converts a string in hexadecimal format (starts with 0x) to its pointer-sized
+ * value.
+ *
+ * @param string  The string to convert.
+ *
+ * @return The converted value, which could be null, or null if it is not
+ *         converted.
+ */
 void *string2pointer(const char *string)
 {
-    void *pointer = 0;
-    sscanf(string, "0x%p", &pointer);
+    void *pointer = NULL;
+    if ( strlen(string) > 1 )
+    {
+        if ( string[1] == 'x' )
+        {
+            sscanf(string, "0x%p", &pointer);
+        }
+        else if ( string[1] == 'X' )
+        {
+            sscanf(string, "0X%p", &pointer);
+        }
+    }
     return pointer;
 }
 
