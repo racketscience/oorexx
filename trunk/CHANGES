@@ -74,6 +74,8 @@ All Platforms
 
   * 2692610 - MAKEARRAY: incorrect result if length(separator) <>1
 
+  * 2787571 - "Select" strange behavoir
+
   Requests For Enhancement
   ------------------------
 
