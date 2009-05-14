@@ -2,7 +2,7 @@
 $ * -------------------------------------------------------------------------
 $ *
 $ * Copyright (c) 1995, 2004 IBM Corporation. All rights reserved.
-$ * Copyright (c) 2005-2006 Rexx Language Association. All rights reserved.
+$ * Copyright (c) 2005-2009 Rexx Language Association. All rights reserved.
 $ *
 $ * This program and the accompanying materials are made available under
 $ * the terms of the Common Public License v1.0 which accompanies this
@@ -1744,6 +1744,9 @@ $ Error_Symbol_or_string_fuzz_value
 
 $ Error_Symbol_or_string_trace_value
 715 String or symbol expected as TRACE value
+
+$ Error_Execution_invalid_thread
+716 Execution thread does not match API thread context.
 
 
 $ * -------------------------------------------------------------------------- */
