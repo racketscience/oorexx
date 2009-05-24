@@ -2867,11 +2867,11 @@ size_t RexxEntry SysRmDir(const char *name, size_t numargs, CONSTRXSTRING args[]
 size_t RexxEntry SysSearchPath(const char *name, size_t numargs, CONSTRXSTRING args[], const char *queuename, PRXSTRING retstr)
 {
     char     szFullPath[_MAX_PATH];      /* returned file name         */
-    char     szCurDir[MAX_ENVVAR + _MAX_PATH]; /* current directory    */
-    char     szEnvStr[MAX_ENVVAR];
+    char     szCurDir[_MAX_PATH];        /* current directory          */
+    char     *szEnvStr = NULL;
 
     LPTSTR pszOnlyFileName;              /* parm for searchpath        */
-    LPTSTR lpPath;                       /* ptr to search path+        */
+    LPTSTR lpPath = NULL;                /* ptr to search path+        */
     UINT   errorMode;
 
     /* validate arguments         */
@@ -2882,46 +2882,90 @@ size_t RexxEntry SysSearchPath(const char *name, size_t numargs, CONSTRXSTRING a
         return INVALID_ROUTINE;
     }
 
-
-    /* search current directory   */
-    GetCurrentDirectory(_MAX_PATH, szCurDir);
-    lpPath=strcat(szCurDir,";");         /*  and specified path        */
-
-    if (GetEnvironmentVariable(args[0].strptr, szEnvStr, MAX_ENVVAR))
-    {
-        lpPath=strcat(szCurDir,szEnvStr); /* szEnvStr instead of lpEnv  */
-    }
-
+    char opt = 'C'; // this is the default
     if (numargs == 3)
     {                  /* process options            */
-        char opt = toupper(args[2].strptr[0]);
-        if (opt == 'N')
-        {
-            GetEnvironmentVariable(args[0].strptr, szEnvStr, MAX_ENVVAR);
-            lpPath = szEnvStr;
-        }
-        // this is the default
-        else if (opt != 'C')
+        opt = toupper(args[2].strptr[0]);
+        if (opt != 'C' && opt != 'N')
         {
             return INVALID_ROUTINE;          /* Invalid option             */
         }
     }
+
+    szEnvStr = (LPTSTR) malloc(sizeof(char) * MAX_ENVVAR);
+    if (szEnvStr != NULL)
+    {
+        DWORD charCount = GetEnvironmentVariable(args[0].strptr, szEnvStr, MAX_ENVVAR);
+        if (charCount == 0) 
+        {
+            *szEnvStr = '\0';
+        }
+        else if (charCount > MAX_ENVVAR)
+        {
+            szEnvStr = (LPTSTR) realloc(szEnvStr, sizeof(char) * charCount);   
+            if (szEnvStr != NULL) 
+            {
+                DWORD charCount2 = GetEnvironmentVariable(args[0].strptr, szEnvStr, charCount);
+                if (charCount2 == 0 || charCount2 > charCount) 
+                {
+                    *szEnvStr = '\0';
+                }
+            }
+        }
+    }
+
+    if (opt == 'N')
+    {
+        lpPath = (szEnvStr == NULL) ? NULL : strdup(szEnvStr);
+    }
+    else if (opt == 'C')
+    {
+        /* search current directory   */
+        DWORD charCount = GetCurrentDirectory(_MAX_PATH, szCurDir);
+        if (charCount == 0 || charCount > _MAX_PATH) 
+        {
+            szCurDir[0] = '\0';
+        }
+
+        if (szEnvStr != NULL)
+        {
+            lpPath = (LPTSTR) malloc(sizeof(char) * (strlen(szCurDir) + 1 + strlen(szEnvStr) + 1));
+            if (lpPath != NULL) 
+            {
+                strcpy(lpPath, szCurDir);
+                strcat(lpPath, ";");
+                strcat(lpPath, szEnvStr);
+            }
+        }
+        else
+        {
+            lpPath = strdup(szCurDir);
+        }
+    }
+
     /* use DosSearchPath          */
 
-    errorMode = SetErrorMode(SEM_FAILCRITICALERRORS);
-    if (0 == SearchPath(
-                       (LPCTSTR)lpPath,              /* path srch, NULL will+      */
-                       (LPCTSTR)args[1].strptr,      /* address if filename        */
-                       NULL,                         /* filename contains .ext     */
-                       _MAX_PATH,                    /* size of fullname buffer    */
-                       szFullPath,                   /* where to put results       */
-                       &pszOnlyFileName))
+    DWORD charCount = 0;
+    if (lpPath != NULL)
+    {
+        errorMode = SetErrorMode(SEM_FAILCRITICALERRORS);
+        charCount = SearchPath(
+                           (LPCTSTR)lpPath,              /* path srch, NULL will+      */
+                           (LPCTSTR)args[1].strptr,      /* address if filename        */
+                           NULL,                         /* filename contains .ext     */
+                           _MAX_PATH,                    /* size of fullname buffer    */
+                           szFullPath,                   /* where to put results       */
+                           &pszOnlyFileName);
+        SetErrorMode(errorMode);
+    }
+    if (charCount == 0 || charCount > _MAX_PATH)
     {
         szFullPath[0]='\0';              /* set to NULL if failure     */
     }
 
     BUILDRXSTRING(retstr, szFullPath);   /* pass back result           */
-    SetErrorMode(errorMode);
+    free(szEnvStr);
+    free(lpPath);
     return VALID_ROUTINE;
 }
 
