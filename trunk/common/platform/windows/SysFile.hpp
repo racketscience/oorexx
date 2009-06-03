@@ -112,8 +112,8 @@ public:
     bool getPosition(int64_t &position);
     bool getSize(int64_t &size);
     bool getSize(const char *name, int64_t &size);
-    bool getTimeStamp(char *&time);
-    bool getTimeStamp(const char *name, char *&time);
+    bool getTimeStamp(const char *&time);
+    bool getTimeStamp(const char *name, const char *&time);
     bool putLine(const char *buffer, size_t len, size_t &bytesWritten);
     bool hasData();
     bool countLines(int64_t &count);
@@ -152,7 +152,7 @@ protected:
     bool   isTTY;           // a keyboard based stream.
     char  *buffer;          // our read/write buffer.
     size_t bufferSize;      // the size of the buffer
-    int64_t bufferPosition; // current read/write position in buffer
+    size_t bufferPosition; // current read/write position in buffer
     size_t bufferedInput;   // amount of data in the buffer
     bool   writeBuffered;   // false == read, true == write
     bool   append;          // opened in append mode
