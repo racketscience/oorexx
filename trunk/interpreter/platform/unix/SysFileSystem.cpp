@@ -90,32 +90,17 @@ bool SysFileSystem::searchFileName(
     }
 
     /* does the filename already have a path? */
-    if (strstr(name, "/") != NULL)
+    /* or does it start with "~" ? */
+	/* (beware, don't test "." because files like ".hidden" alone are candidate for search in PATH */
+    if (strstr(name, "/") != NULL || name[0] == '~' || name[0] == '.')
     {
-        switch (*name)
+        bool done = SysFileSystem::canonicalizeName(tempPath);
+        if (done == false || fileExists(tempPath) == false)
         {
-            case '~':
-                strcpy(tempPath, getenv("HOME"));
-                strcat(tempPath, name + 1);
-                break;
-            case '.':
-                getcwd(tempPath, MaximumFileNameBuffer);
-                strcat(tempPath, name + 1);
-                break;
-            case '/':
-                strcpy(tempPath, name);
-                break;
-            default:
-                getcwd(tempPath, MaximumFileNameBuffer);
-                strcat(tempPath, "/");
-                strcat(tempPath, name);
-                break;
-        }
-        if (fileExists(tempPath) == false)
-        {
-            strcpy(fullName, tempPath);
+            fullName[0] = '\0';
             return false;
         }
+        strcpy(fullName, tempPath);
         return true;
     }
 
@@ -123,17 +108,18 @@ bool SysFileSystem::searchFileName(
     getcwd(tempPath, MaximumFileNameBuffer);
     strcat(tempPath, "/");
     strcat(tempPath, name);
-    if (fileExists(name) == false)
+    if (fileExists(name) == true)
     {
         strcpy(fullName, name);
-        return false;
+        return true;
     }
 
     /* it was not in the current directory so search the PATH */
     currentpath = getenv("PATH");
     if (currentpath == NULL)
     {
-        return true;
+        fullName[0] = '\0';
+        return false;
     }
     sep = strchr(currentpath, ':');
     while (sep != NULL)
@@ -144,10 +130,10 @@ bool SysFileSystem::searchFileName(
         tempPath[i] = '\0';
         strcat(tempPath, "/");
         strcat(tempPath, name);
-        if (fileExists(tempPath) == false)
+        if (fileExists(tempPath) == true)
         {
             strcpy(fullName, tempPath);
-            return false;
+            return true;
         }
         currentpath = sep + 1;
         sep = strchr(currentpath, ':');
@@ -158,14 +144,15 @@ bool SysFileSystem::searchFileName(
         strcpy(tempPath, currentpath);
         strcat(tempPath, "/");
         strcat(tempPath, name);
-        if (fileExists(tempPath) == false)
+        if (fileExists(tempPath) == true)
         {
             strcpy(fullName, tempPath);
-            return false;
+            return true;
         }
     }
 
     /* file not found */
+    fullName[0] = '\0';
     return false;
 }
 
@@ -198,46 +185,15 @@ void SysFileSystem::qualifyStreamName(
         return;                            /* nothing more to do                */
     }
 
-    /* does the filename already have a path? */
-    if (strstr(name, "/") != NULL)
-    {
-        switch (*name)
-        {
-            case '~':
-                strcpy(tempPath, getenv("HOME"));
-                strcat(tempPath, name + 1);
-                break;
-            case '/':
-                strcpy(tempPath, name);
-                break;
-            default:
-                getcwd(tempPath, MaximumFileNameBuffer);
-                strcat(tempPath, "/");
-                strcat(tempPath, name);
-                break;
-        }
-        if (strlen(tempPath) < bufferSize)
-        {
-            strcpy(fullName, tempPath);
-        }
-        else
-        {
-            *fullName = '\0';
-        }
-        return;
-    }
-
-    /* there was no leading path so try the current directory */
-    getcwd(tempPath, MaximumFileNameBuffer);
-    strcat(tempPath, "/");
-    strcat(tempPath, name);
-    if (strlen(tempPath) < bufferSize)
+    strcpy(tempPath, name);
+    bool done = SysFileSystem::canonicalizeName(tempPath);
+    if (done && strlen(tempPath) < bufferSize)
     {
         strcpy(fullName, tempPath);
     }
     else
     {
-        *fullName = '\0';
+        fullName[0] = '\0'; // or leave it unchanged ?
     }
     return;
 }
@@ -408,10 +364,10 @@ bool SysFileSystem::hasExtension(const char *name)
  */
 bool SysFileSystem::hasDirectory(const char *name)
 {
-    // hasDirectory() means we have enough absolute directory 
-    // information at the beginning to bypass performing path searches. 
-    // We really only need to look at the first character. 
-    return name[0] == '~' || name[0] == '/' || name[0] == '.'; 
+    // hasDirectory() means we have enough absolute directory
+    // information at the beginning to bypass performing path searches.
+    // We really only need to look at the first character.
+    return name[0] == '~' || name[0] == '/' || name[0] == '.';
 }
 
 
@@ -598,18 +554,14 @@ bool SysFileSystem::canonicalizeName(char *name)
     {
         // this is the typical case.  This is a directory based off of
         // the current users home directory.
-        if (name[1] == '/')
+        if (name[1] == '\0' || name[1] == '/')
         {
 
             char tempName[PATH_MAX + 3];
             // make a copy of the name
             strncpy(tempName, name, PATH_MAX + 1);
             strcpy(name, getenv("HOME"));
-            // if we need a separator, add one
-            if (name[1] != '/')
-            {
-                strncat(name, "/", PATH_MAX + 1);
-            }
+            // We don't need to add a slash : If we have "~" alone, then no final slash expected (same as for "~user"). If "~/..." then we have the slash already
             strncat(name, tempName + 1, PATH_MAX + 1);
         }
         else
@@ -669,18 +621,113 @@ bool SysFileSystem::canonicalizeName(char *name)
         strncat(name, tempName, PATH_MAX + 1);
     }
 
-    // NOTE:  realpath() is more portable than canonicalize_file_name().  The biggest difference between them
-    // is support for really long file names (longer than PATH_MAX).  Since everything we've done up to this point
-    // has assumed that PATH_MAX is the limit, it probably doesn't make much sense to start worrying about this
-    // at the very last stage of the process.
+    // NOTE:  realpath() is more portable than canonicalize_file_name().
+    // However, they both have problems in that they both fail if the file does
+    // not exist.  There are a number of places where the interpreter needs to
+    // canonicalize a path name whether the file exists or not.  So we use our
+    // own function to normalize the name.
     char tempName[PATH_MAX + 2];
-    char *temp = realpath(name, tempName);
-    if (temp == NULL)
+    if ( normalizePathName(name, tempName) )
+    {
+        strcpy(name, tempName);
+        return true;
+    }
+    return false;
+}
+
+
+/**
+ * Normalize an absolute Unix path name.  Removes duplicate and trailing
+ * slashes, resolves and removes ./ or ../  This works for any path name,
+ * whether the resovled name exists or not.
+ *
+ * @param name      The path name to normalize.
+ * @param resolved  On success the normalized name is returned here.
+ *
+ * @return True on success, otherwise false.
+ *
+ * @assumes  Name is null-terminated and that resolved is an adequate buffer.
+ */
+bool SysFileSystem::normalizePathName(const char *name, char *resolved)
+{
+    // Path name has to be absolute.
+    if ( *name != '/' )
     {
         return false;
     }
-    strcpy(name, tempName);
+
+    char *dest = resolved;
+    char *prevSl = dest;
+    *dest = '/';
+
+    // For each character in the path name, decide whether, and where, to copy.
+    for ( char *p = (char *)name; *p; p++ )
+    {
+        if ( *p == '/' )
+        {
+            // Only adjust prevSl if we don't have a "." coming up next.
+            if ( *(p + 1) != '.' )
+            {
+                prevSl = dest;
+            }
+            if ( *dest == '/' )
+            {
+                // Remove double "/"
+                continue;
+            }
+            *++dest = *p;
+        }
+        else if ( *p == '.' )
+        {
+            if ( *dest == '/' )
+            {
+                char next = *(p + 1);
+                if ( next == '\0' || next == '/' )
+                {
+                    // Don't copy the ".", if at the end, the trailing "/" will
+                    // be removed in the final step. If it is: "./", the double
+                    // "//" will be removed in the next iteration.
+                    continue;
+                }
+                else if ( next == '.' )
+                {
+                    // We have "..", but we don't do anything unless the next
+                    // position is a "/" or the end.  (In case of a file like:
+                    // ..my.file)
+                    next = *(p + 2);
+                    if ( next == '\0' || next == '/' )
+                    {
+                        p++;
+                        dest = prevSl;
+
+                        // Now we probably have to push prevSl back, unless we
+                        // are at the root of the file system.
+                        while ( prevSl > resolved )
+                        {
+                            if ( *--prevSl == '/' )
+                            {
+                                break;
+                            }
+                        }
+                        continue;
+                    }
+                }
+                *++dest = *p;
+            }
+            else
+            {
+                *++dest = *p;
+            }
+        }
+        else
+        {
+            *++dest = *p;
+        }
+    }
+
+    // Terminate. Where, depends on several things.
+    (*dest == '/' && dest != resolved) ? *dest = '\0' : *++dest = '\0';
+
     return true;
 }
-
 
