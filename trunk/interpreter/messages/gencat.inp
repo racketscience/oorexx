@@ -305,6 +305,9 @@ $ Error_RXQUE_syntax
 $ Error_RXQUE_memfail
 132 System error occurred while processing the command
 
+$ Error_REXXC_wrongNrArg_unix
+133 SYNTAX: REXXC InProgramName [OutProgramName] [-s]
+
 $ Error_Program_unreadable_name
 200 Failure during initialization: File "&1" is unreadable
 
