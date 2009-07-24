@@ -5394,7 +5394,7 @@ RexxMethod1(RexxStringObject, stc_getText, OSELF, self)
     }
     else
     {
-        char *buf = (char *)malloc(count);
+        char *buf = (char *)malloc(++count);
         if ( ! buf )
         {
             outOfMemoryException(context);
