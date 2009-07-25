@@ -41,41 +41,6 @@
 #include <stdio.h>
 
 
-/* - - - - Temporary stuff for debugging help, will be removed  - - - - - - - */
-#if 0
-#include <shlobj.h>
-#include <shlwapi.h>
-TCHAR fileBuf[MAX_PATH];
-static const char *fileName = NULL;
-
-void __cdecl DebugMsg(const char* pszFormat, ...)
-{
-  FILE *stream;
-  va_list arglist;
-  char buf[1024];
-  sprintf(buf, "[%s](%lu): ", SERVICENAME, GetCurrentThreadId());
-  va_start(arglist, pszFormat);
-  vsprintf(&buf[strlen(buf)], pszFormat, arglist);
-  va_end(arglist);
-  strcat(buf, "\n");
-
-  if ( fileName == NULL )
-  {
-      SHGetFolderPath(NULL, CSIDL_COMMON_DOCUMENTS | CSIDL_FLAG_CREATE, NULL, 0, fileBuf);
-      PathAppend(fileBuf, "clientApi.log");
-      fileName = fileBuf;
-  }
-
-  stream = fopen(fileName, "a+");
-  if ( stream )
-  {
-    fwrite(buf, 1, strlen(buf), stream);
-    fclose(stream);
-  }
-}
-#endif
-/* - - End Temporary stuff for debugging help - - - - - - - - - - - - - - - - */
-
 #define SERVICENAME "RXAPI"
 
 /**
