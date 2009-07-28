@@ -649,7 +649,7 @@ size_t RexxEntry SockGetSockOpt(const char *name, size_t argc, PCONSTRXSTRING ar
     int            opt;
     struct linger  lingStruct;
     int            intVal;
-    long           longVal;
+    socklen_t      lenVal;
     socklen_t      len;
     char          *ptr;
     CONSTRXSTRING  rxVar;
@@ -711,7 +711,7 @@ size_t RexxEntry SockGetSockOpt(const char *name, size_t argc, PCONSTRXSTRING ar
     /*---------------------------------------------------------------
      * set up buffer
      *---------------------------------------------------------------*/
-    longVal = intVal = 0; /* to eliminate compiler warning */
+    lenVal = intVal = 0; /* to eliminate compiler warning */
 
     switch (opt)
     {
@@ -722,8 +722,8 @@ size_t RexxEntry SockGetSockOpt(const char *name, size_t argc, PCONSTRXSTRING ar
 
         case SO_RCVBUF:
         case SO_SNDBUF:
-            ptr = (char *)&longVal;
-            len = sizeof(long);
+            ptr = (char *)&lenVal;
+            len = sizeof(lenVal);
             break;
 
         default:
@@ -742,8 +742,7 @@ size_t RexxEntry SockGetSockOpt(const char *name, size_t argc, PCONSTRXSTRING ar
     switch (opt)
     {
         case SO_LINGER:
-            sprintf(pBuffer,"%ld %ld",
-                    (long) lingStruct.l_onoff, (long) lingStruct.l_linger);
+            sprintf(pBuffer,"%d %d", lingStruct.l_onoff, lingStruct.l_linger);
             break;
 
         case SO_TYPE:
@@ -758,11 +757,11 @@ size_t RexxEntry SockGetSockOpt(const char *name, size_t argc, PCONSTRXSTRING ar
 
         case SO_RCVBUF:
         case SO_SNDBUF:
-            sprintf(pBuffer,"%ld",(long) longVal);
+            sprintf(pBuffer, "%d", lenVal);
             break;
 
         default:
-            sprintf(pBuffer,"%ld",(long) intVal);
+            sprintf(pBuffer, "%d", intVal);
     }
 
     /*---------------------------------------------------------------
@@ -1624,9 +1623,9 @@ size_t RexxEntry SockSetSockOpt(const char *name, size_t argc, PCONSTRXSTRING ar
     int            opt;
     struct linger  lingStruct;
     int            intVal;
-    long           longVal;
-    long           longVal1;
-    long           longVal2;
+    socklen_t      lenVal;
+    int            intVal1;
+    int            intVal2;
     int            len;
     char          *ptr;
 
@@ -1698,18 +1697,18 @@ size_t RexxEntry SockSetSockOpt(const char *name, size_t argc, PCONSTRXSTRING ar
             ptr = (char *)&lingStruct;
             len = sizeof(lingStruct);
 
-            sscanf(argv[3].strptr,"%ld %ld",&longVal1,&longVal2);
-            lingStruct.l_onoff  = (u_short)longVal1;
-            lingStruct.l_linger = (u_short)longVal2;
+            sscanf(argv[3].strptr,"%d %d",&intVal1,&intVal2);
+            lingStruct.l_onoff  = (u_short)intVal1;
+            lingStruct.l_linger = (u_short)intVal2;
 
             break;
 
         case SO_RCVBUF:
         case SO_SNDBUF:
-            ptr = (char *)&longVal;
-            len = sizeof(long);
+            ptr = (char *)&lenVal;
+            len = sizeof(lenVal);
 
-            longVal = rxs2int(&(argv[3]),&rc);
+            lenVal = rxs2int(&(argv[3]),&rc);
             break;
 
         case SO_ERROR:
