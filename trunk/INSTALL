@@ -185,9 +185,13 @@ available at:
   http://subversion.tigris.org/project_packages.html
 
 Once the Subversion client is installed, the command to checkout is as
-follows, using the 3.x head as an example:
+follows, using the 4.x head as an example:
 
-E:\work>svn co https://oorexx.svn.sourceforge.net/svnroot/oorexx/interpreter-3.x/trunk interpreter
+E:\work>svn co https://oorexx.svn.sourceforge.net/svnroot/oorexx/main/trunk interpreter
+
+You can also check out the 4.0.0 release code:
+
+E:\work>svn co https://oorexx.svn.sourceforge.net/svnroot/oorexx/main/releases/4.0.0 interpreter
 
 In this command, the last word of the command is the directory into which
 the source tree will be checked out.  The name of the directory can be any
