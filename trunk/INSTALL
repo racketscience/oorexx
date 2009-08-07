@@ -126,10 +126,32 @@ systems.  The commands to install a .dmg file are as follows:
 AIX
 ---
 
-There is a .bff install package for AIX.  The commands to install are as
-follows:
+There is a LPP install package for AIX.
 
-%
+This LPP will add an SRC subsystem named rxapi. The subsystem is started
+automatically after the installation and via an entry in the /etc/inittab
+during boot.
+
+Copy the ooRexx 32 bit _or_ 64 bit installation package to an empty
+directory and then execute the following commands:
+
+To install the 32 bit version:
+
+root@box # inutoc ./
+root@box # installp -a -c -X -v -Y -V2 -g -d./ ooRexx.32.rte 4.0.0.0
+
+To uninstall the 32 bit version:
+
+root@box # installp -u ooRexx.32.rte
+
+To install the 64 bit version:
+
+root@box # inutoc ./
+root@box # installp -a -c -X -v -Y -V2 -g -d./ ooRexx.64.rte 4.0.0.0
+
+To uninstall the 64 bit version:
+
+root@box # installp -u ooRexx.64.rte
 
 
 Build and Install From a Release Source Archive
