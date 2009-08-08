@@ -186,11 +186,11 @@ help:                                          /* Request for online help.  */
          contain blanks */
       say '  Online Help started'
       'start "Rexx Online Documentation"' '"'||value("REXX_HOME",,"ENVIRONMENT")||"\doc\rexxref.pdf"||'"'
-    end                                        /* ... for Unix              */
-    when sysrx = AIX | sysrx = LINUX | sysrx = 'SUNOS' then do
+    end                                        /* ... for Unix, no docs     */
+    /* when sysrx = AIX | sysrx = LINUX | sysrx = 'SUNOS' then do
       say '  Online Help started using Acroread .../rexxref.pdf'
-      'acroread /opt/oorexx/doc/rexxref.pdf&'
-    end
+      'acroread /opt/ooRexx/doc/rexxref.pdf&'
+    end */  -- Docs are not installed on unixes at this time, could be added.
     otherwise say '  'sysrx' has no online help for REXX.'
       rc = 'Sorry!'                            /* No help available         */
   end
