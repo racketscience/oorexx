@@ -138,7 +138,7 @@ directory and then execute the following commands:
 To install the 32 bit version:
 
 root@box # inutoc ./
-root@box # installp -a -c -X -v -Y -V2 -g -d./ ooRexx.32.rte 4.0.0.0
+root@box # installp -a -c -X -v -Y -V2 -g -d./ ooRexx.32.rte 4.0.0.1
 
 To uninstall the 32 bit version:
 
@@ -147,7 +147,7 @@ root@box # installp -u ooRexx.32.rte
 To install the 64 bit version:
 
 root@box # inutoc ./
-root@box # installp -a -c -X -v -Y -V2 -g -d./ ooRexx.64.rte 4.0.0.0
+root@box # installp -a -c -X -v -Y -V2 -g -d./ ooRexx.64.rte 4.0.0.1
 
 To uninstall the 64 bit version:
 
