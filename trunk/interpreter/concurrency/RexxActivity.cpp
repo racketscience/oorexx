@@ -319,7 +319,10 @@ wholenumber_t RexxActivity::error()
     {
         // if we're not to the stack very base of the stack, terminate the frame
         this->topStackFrame->termination();
-        this->popStackFrame(false);
+        if (!this->popStackFrame(false))
+        {
+            break;     // in some halt cases, this might already have been popped
+        }
     }
 
     wholenumber_t rc = Error_Interpretation/1000;      /* set default return code           */
@@ -353,7 +356,10 @@ wholenumber_t RexxActivity::error(RexxActivationBase *activation, RexxDirectory 
     {
         // if we're not to the stack very base of the stack, terminate the frame
         this->topStackFrame->termination();
-        this->popStackFrame(false);
+        if (!this->popStackFrame(false))
+        {
+            break;     // in some halt cases, this might already have been popped
+        }
     }
 
     wholenumber_t rc = Error_Interpretation/1000;      /* set default return code           */
@@ -1418,7 +1424,7 @@ void RexxActivity::createNewActivationStack()
  * @param reply  Indicates we're popping the frame for a reply operation.  In that
  *               case, we can't return the frame to the activation cache.
  */
-void RexxActivity::popStackFrame(bool  reply)
+bool RexxActivity::popStackFrame(bool  reply)
 {
     // pop off the top elements and reduce the depth
     RexxActivationBase *poppedStackFrame = (RexxActivationBase *)activations->fastPop();
@@ -1430,6 +1436,7 @@ void RexxActivity::popStackFrame(bool  reply)
     {
         activations->push((RexxObject *)poppedStackFrame);
         stackFrameDepth++;
+        return false;
     }
     else
     {
@@ -1443,6 +1450,7 @@ void RexxActivity::popStackFrame(bool  reply)
             /* add this to the cache             */
             ActivityManager::cacheActivation(poppedStackFrame);
         }
+        return true;
     }
 }
 

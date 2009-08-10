@@ -174,7 +174,7 @@ typedef enum
    void        updateFrameMarkers();
    void        pushStackFrame(RexxActivationBase *new_activation);
    void        createNewActivationStack();
-   void        popStackFrame(bool  reply);
+   bool        popStackFrame(bool  reply);
    void        popStackFrame(RexxActivationBase *);
    void        unwindStackFrame();
    void        unwindToDepth(size_t depth);
