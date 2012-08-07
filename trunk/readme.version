@@ -3,6 +3,7 @@ When changing the version number of ooRexx you will need to change the following
 oorexx.ver
 configure.ac
 CHANGES
+ReleaseNotes
 extensions/rxftp/rxftp.cls
 platform/unix/oorexx-config.1
 platform/unix/oorexx.spec.in
