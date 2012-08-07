@@ -4,6 +4,7 @@ oorexx.ver
 configure.ac
 CHANGES
 ReleaseNotes
+api\oorexxapi.h
 extensions/rxftp/rxftp.cls
 platform/unix/oorexx-config.1
 platform/unix/oorexx.spec.in
