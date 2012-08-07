@@ -1,7 +1,11 @@
    Building Open Object Rexx on Unix-like Systems (Linux, Solaris, etc.)
    =====================================================================
 
-Please read ALL of these notes before building ooRexx!
+Please read ALL of these notes before building ooRexx.
+
+Any version numbers used in this document, such as 4.0.0 or 4.2.0, are meant
+to be generic version numbers.  Substitute the version number actually being
+used for these place holders.
 
 The process of building ooRexx is slightly different if building from a
 release source file achieve or from a svn checkout.  When building from a

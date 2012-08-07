@@ -3,8 +3,10 @@
 
 Please read ALL of these notes, to be sure you understand your options,
 before building ooRexx.  These notes cover building the 3.x and 4.x versions
-of ooRexx.  (In this document the term "builder" is used to refer to the
-person building ooRexx from source.)
+of ooRexx.  In this document the term "builder" is used to refer to the
+person building ooRexx from source.  Any version numbers such as 4.0.0 or
+4.2.0 are meant to be generic version numbers.  Substitute the version
+number actually being used for these place holders.
 
 Obtaining the source
 ====================
