@@ -18,7 +18,7 @@ File List
 =========
 Linux rpm and deb packages contain the distribution name and version of
 the system they were built on.  For instance,
-ooRexx-4.1.2-beta1.opensuse1110.x86_64.rpm was built on OpenSuSE 11.1.
+ooRexx-4.1.3.opensuse1110.x86_64.rpm was built on OpenSuSE 11.10.
 
 All package names contain an indication if the package is built as a 32-bit
 or 64-bit binary.  Usually this indicator is x86_32 or x86_64.  For a 32-bit
@@ -31,12 +31,15 @@ to get one of the developers to build a package for your system by opening
 up a support request in the tracker system.  Note that developer resources
 are constrained and this is neither a commitment nor a promise.
 
-Readme.pdf
+_Readme.pdf
 Installation help and other relevant notes that should be read prior to
 installation.
 
+_Readme.html
+The same text as _Readme.pdf in HTML format.
+
 INSTALL
-Installation help in a text format.
+Additional installation help in a text format.
 
 ReleaseNotes
 This file.
@@ -47,6 +50,15 @@ readme file in the file download section.
 
 ooRexx-4.1.2*
 The installation packages for various operating systems.
+
+ooRexx-4.1.2-source.tar.gz
+The source code for this version of ooRexx, suitable for building on an
+unix-like system.  Includes the configure script.
+
+ooRexx-4.1.2-source.zip
+The source code for this version of ooRexx, suitable for building and
+packaging on a Windows system.  Includes the PDF documentation files which
+are required for the packaging step.
 
 
 Installation and Configuration
@@ -60,8 +72,13 @@ on any platform.  Please completely uninstall a prior version of ooRexx
 before installing a new version.  Installing over the top of an existing
 installation is likely to produce unpredictable results.
 
+Note:  On Windows only, the installer will detect a previous installation
+and launch the uninstalltion program automatically.  The uninstall program
+will completely uninstall the previous version of ooRexx and then return
+control to the installer.
+
 For installation help and other relevant notes, prior to installation,
-please read the "ReadMe.pdf" PDF file which is placed with the downloadable
+please read the "_ReadMe.pdf" PDF file which is placed with the downloadable
 files for this release on SourceForge.
 
 A Note on Linux packages:
