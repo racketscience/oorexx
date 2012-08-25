@@ -1,4 +1,4 @@
-#!/bin/sh 
+#!/bin/sh
 
 # A version of rxapid for Mac OS X 10.5+
 
@@ -29,7 +29,10 @@ then
 fi
 
 # Check the running processes to see if that PID is running.
-running=`ps -p $pid | grep -v PID | cut -d'/' -f2- | sed -e "s.^./."`
+if [ $pid != "" ]
+then
+	running=`ps -p $pid | grep -v PID | cut -d'/' -f2- | sed -e "s.^./."`
+fi
 
 case $1 in
 	start)
